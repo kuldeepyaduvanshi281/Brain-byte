@@ -1,90 +1,72 @@
-# Brain-byte
-This is Brain Byte's repository
-📚 Overview
-EduSync is a comprehensive academic platform designed to replace chaotic WhatsApp college groups with organized, course-based dashboards. This AI-powered solution provides students with a structured environment to manage assignments, track homework, access notices, connect with faculty, and receive personalized academic assistance.
+# 🎓 EduSync - AI-Powered Academic Platform
 
-✨ Features
-🏠 Dashboard
-Personalized welcome with AI recommendations
+![EduSync Banner](https://via.placeholder.com/1200x400/4361ee/ffffff?text=EduSync+AI-Powered+Academic+Platform)
+*A smart platform to replace WhatsApp college groups with organized academic management*
 
-Academic statistics overview (assignments, deadlines, completion rates)
+## 🎯 Overview
 
-Course progress tracking with visual indicators
+EduSync is a comprehensive **AI-powered academic platform** designed to transform how students manage their college life. It replaces chaotic WhatsApp groups with **organized, course-based dashboards** featuring subject-wise assignments, homework tracking, notice boards, faculty directories, and smart AI assistance.
 
-Latest college notices
+### 🎉 Key Benefits
+- ✅ **Organized Dashboard** - Everything in one place
+- ✅ **AI-Powered Assistance** - Smart study recommendations
+- ✅ **Real-time Tracking** - Monitor assignments and deadlines
+- ✅ **Faculty Connection** - Direct contact information
+- ✅ **Mobile Responsive** - Works on all devices
 
-📝 Assignments & Homework Tracker
-Comprehensive assignment list with status tracking
+## 🚀 Features
 
-Deadline monitoring with visual indicators
+### 📊 **Dashboard**
+- Personalized welcome with AI insights
+- Academic statistics at a glance
+- Course progress tracking
+- Quick access to all features
 
-Checkbox system for completion tracking
+### 📝 **Assignments & Homework Tracker**
+- Complete assignment management
+- Deadline tracking with color codes
+- Checkbox completion system
+- AI-powered study tips
+- Filter by subject or status
 
-AI-powered study suggestions for each assignment
+### 📢 **Notice Board**
+- Organized college announcements
+- Categorized notices (Academic, Events, Career)
+- AI-generated summaries
+- Save and share functionality
 
-📢 Notice Board
-Organized college announcements categorized by importance
+### 👨‍🏫 **Faculty Directory**
+- **Phone numbers only** - simplified contact
+- Quick call/save/copy functionality
+- Emergency contacts included
+- Department-wise organization
 
-AI-generated summaries of key updates
+### 📅 **My Calendar**
+- Interactive academic calendar
+- Personal event management
+- Multiple view options (Month/Week/Day)
+- Today's schedule sidebar
 
-Option to save or share notices
+### 👤 **My Profile**
+- Complete academic profile
+- Performance statistics (GPA, attendance)
+- Course enrollment details
+- Contact information
 
-👨‍🏫 Faculty Directory
-Faculty profiles with contact information
+### ⚙️ **Settings**
+- Customizable notifications
+- Privacy controls
+- AI assistant preferences
+- Display settings (dark mode, font size)
 
-Phone numbers only (no emails or office hours)
+### ❓ **Help & Support**
+- Comprehensive FAQ section
+- 24/7 support contacts
+- Video tutorials
+- Feedback submission
 
-Quick contact options (call, save contact, copy number)
-
-Emergency contacts section
-
-📅 My Calendar
-Interactive academic calendar with month navigation
-
-Personal event management
-
-Today's events and upcoming schedule sidebar
-
-Multiple view options (Month, Week, Day, List)
-
-👤 My Profile
-Complete academic profile with personal information
-
-Performance statistics (GPA, attendance, assignments)
-
-Current courses and contact details
-
-Academic progress tracking
-
-⚙️ Settings
-Notification preferences (assignments, classes, notices)
-
-Privacy and visibility settings
-
-AI assistant customization
-
-Display preferences (dark mode, font size, calendar view)
-
-❓ Help & Support
-FAQ section with expandable questions
-
-Support contact options (phone, email)
-
-Video tutorials and feedback submission
-
-24/7 support hotline
-
-🤖 AI Assistant
-Smart task prioritization based on deadlines
-
-Personalized study recommendations
-
-Assignment help and explanations
-
-Progress analytics and insights
-
-🚀 Getting Started
-Prerequisites
-Modern web browser (Chrome, Firefox, Safari, Edge)
-
-Internet connection for external resources (Font Awesome, Google Fonts)
+### 🤖 **AI Assistant**
+- Smart task prioritization
+- Personalized study plans
+- Assignment help
+- Progress analytics
