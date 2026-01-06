@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSync - AI-Powered Academic Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --success-color: #4ade80;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --text-color: #334155;
+            --card-bg: #ffffff;
+            --sidebar-bg: #f1f5f9;
+            --border-color: #e2e8f0;
+            --math-color: #3b82f6;
+            --science-color: #10b981;
+            --history-color: #8b5cf6;
+            --english-color: #f59e0b;
+            --cs-color: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fb;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            padding: 20px 0;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo i { font-size: 28px; color: var(--primary-color); }
+        .logo h1 { font-size: 22px; font-weight: 700; color: var(--dark-color); }
+        .logo span { color: var(--primary-color); }
+
+        .nav-items {
+            flex: 1;
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.3s;
+            display: block;
+        }
+
+        .nav-item:hover { background-color: rgba(67, 97, 238, 0.1); color: var(--primary-color); }
+        .nav-item.active { background-color: var(--primary-color); color: white; }
+        .nav-item i { font-size: 18px; width: 24px; }
+
+        .subjects-list {
+            padding: 20px 15px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 10px;
+        }
+
+        .subjects-list h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .subject-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin: 0 5px 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .subject-tag.math { background-color: rgba(59, 130, 246, 0.1); color: var(--math-color); border: 1px solid rgba(59, 130, 246, 0.3); }
+        .subject-tag.science { background-color: rgba(16, 185, 129, 0.1); color: var(--science-color); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .subject-tag.history { background-color: rgba(139, 92, 246, 0.1); color: var(--history-color); border: 1px solid rgba(139, 92, 246, 0.3); }
+        .subject-tag.english { background-color: rgba(245, 158, 11, 0.1); color: var(--english-color); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .subject-tag.cs { background-color: rgba(239, 68, 68, 0.1); color: var(--cs-color); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .subject-tag.active, .subject-tag:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+
+        .user-profile {
+            padding: 20px 15px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .profile-info { display: flex; align-items: center; gap: 12px; }
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .profile-details h4 { font-size: 15px; font-weight: 600; color: var(--dark-color); }
+        .profile-details p { font-size: 13px; color: #64748b; }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 20px;
+            max-width: calc(100% - 260px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title h2 { font-size: 28px; font-weight: 700; color: var(--dark-color); }
+        .page-title p { color: #64748b; font-size: 15px; margin-top: 5px; }
+
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+        .search-bar { position: relative; }
+        .search-bar input {
+            padding: 12px 15px 12px 45px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background-color: white;
+            width: 280px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-bar input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1); }
+        .search-bar i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        .notification-btn, .menu-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-color);
+        }
+
+        .notification-btn:hover, .menu-toggle:hover { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle { display: none; }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* NOTIFICATIONS PAGE STYLES */
+        .notifications-list { display: flex; flex-direction: column; gap: 15px; }
+        .notification-item {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary-color);
+            cursor: pointer;
+        }
+
+        .notification-item.unread { border-left-color: var(--danger-color); background-color: #fef2f2; }
+        .notification-item:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .notification-content h4 { margin: 0 0 5px 0; font-size: 16px; font-weight: 600; }
+        .notification-content p { margin: 0 0 5px 0; color: #64748b; font-size: 14px; }
+        .notification-time { font-size: 12px; color: #94a3b8; }
+        .notification-actions button { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 5px; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); position: fixed; z-index: 1000; }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; max-width: 100%; }
+            .menu-toggle { display: flex; }
+        }
+
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .header-actions { width: 100%; justify-content: space-between; }
+            .search-bar input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Edu<span>Sync</span></h1>
+            </div>
+            <div class="nav-items">
+                <a href="#" class="nav-item active" data-page="dashboard"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                <a href="#" class="nav-item" data-page="assignments"><i class="fas fa-tasks"></i><span>Assignments</span></a>
+                <a href="#" class="nav-item" data-page="homework"><i class="fas fa-book"></i><span>Homework Tracker</span></a>
+                <a href="#" class="nav-item" data-page="notices"><i class="fas fa-bullhorn"></i><span>Notice Board</span></a>
+                <a href="#" class="nav-item" data-page="faculty"><i class="fas fa-chalkboard-teacher"></i><span>Faculty Directory</span></a>
+                <a href="#" class="nav-item" data-page="mycalendar"><i class="fas fa-calendar-alt"></i><span>My Calendar</span></a>
+                <a href="#" class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>My Profile</span></a>
+                <a href="#" class="nav-item" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></a>
+                <a href="#" class="nav-item" data-page="notifications"><i class="fas fa-bell"></i><span>Notifications</span></a>
+                <a href="#" class="nav-item" data-page="help"><i class="fas fa-question-circle"></i><span>Help & Support</span></a>
+                <a href="#" class="nav-item" data-page="ai"><i class="fas fa-robot"></i><span>AI Assistant</span></a>
+            </div>
+            <div class="subjects-list">
+                <h3>My Subjects</h3>
+                <div class="subject-tag math active">Mathematics</div>
+                <div class="subject-tag science">Science</div>
+                <div class="subject-tag history">History</div>
+                <div class="subject-tag english">English</div>
+                <div class="subject-tag cs">Computer Science</div>
+            </div>
+            <div class="user-profile">
+                <div class="profile-info">
+                    <div class="profile-avatar">AJ</div>
+                    <div class="profile-details">
+                        <h4>Brain Byte Team</h4>
+                        <p>Computer Science, Year 3</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="page-title">
+                    <h2 id="pageTitle">Dashboard</h2>
+                    <p id="pageSubtitle">Welcome to your AI-powered academic platform</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search assignments, notices, or faculty...">
+                    </div>
+                    <div class="notification-btn" style="position: relative;">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                    </div>
+                    <div class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Page (Sample) -->
+            <div class="page active" id="dashboard">
+                <div style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border-radius: 15px; padding: 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(67, 97, 238, 0.2);">
+                    <div>
+                        <h3>Good morning, Alex!</h3>
+                        <p>You have 2 assignments due this week.</p>
+                    </div>
+                    <button style="background: white; color: var(--primary-color); border: none; padding: 12px 24px; border-radius: 30px; font-weight: 600; cursor: pointer;">Ask AI Assistant</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+                    <div style="background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div style="width: 50px; height: 50px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #fbbf24); display: flex; align-items: center; justify-content: center; color: white;"><i class="fas fa-clipboard-list"></i></div>
+                            <div>12</div>
+                        </div>
+                        <div style="font-size: 32px; font-weight: 700; color: var(--dark-color);">Pending</div>
+                        <div style="font-size: 14px; color: #64748b;">Assignments</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOTIFICATIONS PAGE -->
+            <div class="page" id="notifications">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h3 class="section-title" style="font-size: 22px; font-weight: 600; color: var(--dark-color);">Notifications</h3>
+                    <div class="view-all" style="color: var(--primary-color); font-weight: 500; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 5px;" id="markAllRead">
+                        Mark All Read <i class="fas fa-check-double"></i>
+                    </div>
+                </div>
+                <div class="notifications-list">
+                    <div class="notification-item unread" data-notification-id="1">
+                        <div class="notification-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>New assignment: Calculus Problem Set 3</h4>
+                            <p>Due tomorrow at 10:00 AM • Mathematics</p>
+                            <span class="notification-time">2 hours ago</span>
+                        </div>
+                        <div class="notification-actions">
+                            <button class="delete-notif" data-notification-id="1"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="notification-item unread" data-notification-id="2">
+                        <div class="notification-icon">
+                            <i class="fas fa-calendar-times"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>Assignment overdue: Data Structures Project</h4>
+                            <p>Submit extension request • Computer Science</p>
+                            <span class="notification-time">1 day ago</span>
+                        </div>
+                        <div class="notification-actions">
+                            <button class="delete-notif" data-notification-id="2"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="notification-item" data-notification-id="3">
+                        <div class="notification-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>Great job! Literature Essay graded 92%</h4>
+                            <p>Excellent analysis of theme • English</p>
+                            <span class="notification-time">2 days ago</span>
+                        </div>
+                        <div class="notification-actions">
+                            <button class="delete-notif" data-notification-id="3"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="notification-item unread" data-notification-id="4">
+                        <div class="notification-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>Mid-term schedule published</h4>
+                            <p>Check academic calendar for dates</p>
+                            <span class="notification-time">3 days ago</span>
+                        </div>
+                        <div class="notification-actions">
+                            <button class="delete-notif" data-notification-id="4"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="notification-item" data-notification-id="5">
+                        <div class="notification-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>AI Study Tips available</h4>
+                            <p>Personalized recommendations for Math</p>
+                            <span class="notification-time">5 days ago</span>
+                        </div>
+                        <div class="notification-actions">
+                            <button class="delete-notif" data-notification-id="5"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page');
+        const pageTitle = document.getElementById('pageTitle');
+        const pageSubtitle = document.getElementById('pageSubtitle');
+
+        const pageData = {
+            dashboard: { title: 'Dashboard', subtitle: 'Welcome to your AI-powered academic platform' },
+            assignments: { title: 'Assignments', subtitle: 'Track and manage all your course assignments' },
+            homework: { title: 'Homework Tracker', subtitle: 'Monitor daily homework with completion tracking' },
+            notices: { title: 'Notice Board', subtitle: 'Important college announcements and updates' },
+            faculty: { title: 'Faculty Directory', subtitle: 'Contact information with phone numbers' },
+            mycalendar: { title: 'My Calendar', subtitle: 'Manage your personal academic schedule' },
+            profile: { title: 'My Profile', subtitle: 'View and manage your academic profile' },
+            settings: { title: 'Settings', subtitle: 'Customize your preferences' },
+            notifications: { title: 'Notifications', subtitle: 'Stay updated with important alerts' },
+            help: { title: 'Help & Support', subtitle: 'Get assistance and support' },
+            ai: { title: 'AI Assistant', subtitle: 'Your personal study companion' }
+        };
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = item.getAttribute('data-page');
+                
+                // Update active nav
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Show page
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+                
+                // Update title
+                if (pageData[pageId]) {
+                    pageTitle.textContent = pageData[pageId].title;
+                    pageSubtitle.textContent = pageData[pageId].subtitle;
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // NOTIFICATIONS FUNCTIONALITY
+        document.getElementById('markAllRead').addEventListener('click', () => {
+            document.querySelectorAll('.notification-item.unread').forEach(item => {
+                item.classList.remove('unread');
+            });
+            // Update badge
+            const badge = document.querySelector('.notification-badge');
+            let count = parseInt(badge.textContent) || 0;
+            count = Math.max(0, count - 5);
+            badge.textContent = count || '';
+        });
+
+        // Delete individual notification
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-notif')) {
+                const notification = e.target.closest('.notification-item');
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+                
+                // Update badge
+                const badge = document.querySelector('.notification-badge');
+                let count = parseInt(badge.textContent) || 0;
+                count = Math.max(0, count - 1);
+                badge.textContent = count || '';
+            }
+        });
+
+        // Notification click to mark read
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('delete-notif')) {
+                    item.classList.remove('unread');
+                }
+            });
+        });
+
+        // Add CSS animation for delete
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Simulate new notification every 30 seconds
+        setInterval(() => {
+            const notificationsList = document.querySelector('.notifications-list');
+            if (document.getElementById('notifications').classList.contains('active')) {
+                const newNotif = document.createElement('div');
+                newNotif.className = 'notification-item unread';
+                newNotif.innerHTML = `
+                    <div class="notification-icon"><i class="fas fa-star"></i></div>
+                    <div class="notification-content">
+                        <h4>New achievement unlocked!</h4>
+                        <p>Completed 5 assignments this week</p>
+                        <span class="notification-time">Just now</span>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="delete-notif" data-notification-id="new"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                notificationsList.insertBefore(newNotif, notificationsList.firstChild);
+                
+                // Update badge
+                const badge = document.querySelector('.notification-badge');
+                let count = parseInt(badge.textContent) || 0;
+                badge.textContent = count + 1;
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
