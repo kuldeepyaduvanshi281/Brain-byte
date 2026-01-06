@@ -1,687 +1,1142 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Brain Byte — Academic Collaboration</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root{
-      --bg:#0f172a;
-      --panel:#111827;
-      --card:#1f2937;
-      --muted:#93a4b7;
-      --text:#f8fafc;
-      --accent:#22c55e;
-      --accent-2:#6366f1;
-      --danger:#ef4444;
-      --warn:#f59e0b;
-      --primary:#0ea5e9;
-      --border:#334155;
-      --shadow:rgba(0,0,0,0.45);
-    }
-    [data-theme="light"]{
-      --bg:#f5f7fb;
-      --panel:#ffffff;
-      --card:#ffffff;
-      --muted:#64748b;
-      --text:#0f172a;
-      --accent:#16a34a;
-      --accent-2:#4f46e5;
-      --danger:#dc2626;
-      --warn:#d97706;
-      --primary:#0284c7;
-      --border:#e2e8f0;
-      --shadow:rgba(0,0,0,0.08);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    }
-    a{color:var(--primary);text-decoration:none}
-    .app{min-height:100vh;display:grid;grid-template-rows:auto 1fr}
-    /* LOGIN */
-    #loginPage{
-      display:flex;align-items:center;justify-content:center;
-      min-height:100vh;
-      background:linear-gradient(135deg, rgba(79,70,229,0.25), rgba(34,197,94,0.15));
-      padding:24px;
-    }
-    .login-box{
-      width:100%;max-width:420px;background:var(--panel);
-      border:1px solid var(--border);border-radius:16px;padding:24px;
-      box-shadow:0 12px 36px var(--shadow);animation:fadeIn .5s ease;
-    }
-    @keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-    .brand{
-      display:flex;align-items:center;gap:10px;margin-bottom:16px;font-weight:800
-    }
-    .brand .mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;
-      background:linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 8px 24px rgba(99,102,241,0.35)}
-    .login-box h2{margin:8px 0 18px 0}
-    .row{display:flex;gap:8px;margin-bottom:10px}
-    input,select{
-      width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);
-      background:var(--card);color:var(--text);font-size:14px
-    }
-    button{
-      padding:10px 12px;border:none;border-radius:12px;cursor:pointer;font-weight:600
-    }
-    .btn-primary{background:var(--accent-2);color:#fff}
-    .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
-    .helper{font-size:13px;color:var(--muted);margin-top:10px}
-    .sep{height:1px;background:var(--border);margin:16px 0}
-    /* TOP BAR */
-    header{
-      position:sticky;top:0;z-index:10;
-      backdrop-filter:saturate(1.2) blur(8px);
-      background:var(--panel);
-      border-bottom:1px solid var(--border);
-    }
-    .topbar{
-      display:flex;align-items:center;gap:12px;padding:12px 16px
-    }
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800}
-    .logo .mark{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;
-      background:linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 6px 18px rgba(99,102,241,0.35)}
-    .invite{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .pill{
-      background:rgba(99,102,241,0.12);
-      color:inherit;border:1px dashed var(--border);
-      padding:8px 10px;border-radius:999px;font-size:12px
-    }
-    .toolbar{display:flex;align-items:center;gap:8px}
-    .icon-btn{
-      border:1px solid var(--border);background:var(--card);
-      color:var(--text);border-radius:10px;padding:8px;cursor:pointer
-    }
-    .notif-dot{width:8px;height:8px;background:var(--danger);border-radius:50%;display:inline-block;margin-left:6px}
-    nav.tabs{display:flex;gap:8px;padding:8px 16px;overflow:auto;border-top:1px solid var(--border)}
-    .tab{
-      padding:10px 12px;border-radius:10px;cursor:pointer;background:transparent;
-      border:1px solid var(--border);color:var(--text);white-space:nowrap
-    }
-    .tab.active{background:var(--card);border-color:var(--primary);box-shadow:0 0 0 2px rgba(14,165,233,0.25) inset}
-    main{padding:16px;max-width:1200px;margin:0 auto;width:100%}
-    /* CARDS + GRID */
-    .grid{display:grid;gap:12px}
-    .grid.cards{grid-template-columns:1fr}
-    @media(min-width:768px){.grid.cards{grid-template-columns:repeat(2,1fr)}}
-    @media(min-width:1024px){.grid.cards{grid-template-columns:repeat(3,1fr)}}
-    .card{
-      background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;position:relative;
-      box-shadow:0 8px 28px var(--shadow)
-    }
-    .card h3{margin:0 0 8px 0;font-size:16px}
-    .card .sub{color:var(--muted);font-size:12px;margin-top:-2px}
-    .progress{height:10px;border-radius:999px;background:rgba(2,6,23,0.06);border:1px solid var(--border);overflow:hidden;margin-top:8px}
-    .progress .bar{height:100%;background:linear-gradient(90deg,var(--accent),#34d399);width:0%;transition:width .3s ease;border-right:1px solid rgba(0,0,0,0.1)}
-    .list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-    .item{
-      display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;
-      padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--card)
-    }
-    .item .title{font-weight:600}
-    .item .meta{color:var(--muted);font-size:12px}
-    .item .actions{display:flex;gap:6px}
-    .chk{width:18px;height:18px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center;cursor:pointer}
-    .chk.done{background:var(--accent);border-color:var(--accent);color:#052e1a}
-    .badge{padding:4px 8px;border-radius:999px;font-size:12px;border:1px solid var(--border);background:rgba(255,255,255,0.04)}
-    .badge.warn{color:#fde68a;border-color:#fde68a;background:rgba(245,158,11,0.12)}
-    .badge.danger{color:#fecaca;border-color:#fecaca;background:rgba(239,68,68,0.12)}
-    .badge.ok{color:#d1fae5;border-color:#d1fae5;background:rgba(34,197,94,0.12)}
-    .notice{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
-    .pin{color:#fde68a}
-    .searchbar{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;margin-bottom:12px}
-    .faculty{display:grid;gap:12px;grid-template-columns:1fr}
-    @media(min-width:600px){.faculty{grid-template-columns:repeat(2,1fr)}}
-    @media(min-width:900px){.faculty{grid-template-columns:repeat(3,1fr)}}
-    .fac-card{
-      display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;
-      background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px
-    }
-    .avatar{
-      width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#334155,#1f2937);
-      display:grid;place-items:center;font-weight:800;color:#cbd5e1
-    }
-    .cal{display:grid;gap:8px}
-    .cal .head{display:flex;justify-content:space-between;align-items:center}
-    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-    .cal-day{border:1px solid var(--border);border-radius:10px;padding:10px;background:var(--card);min-height:72px;position:relative}
-    .cal-day .num{position:absolute;top:6px;left:8px;font-size:12px;color:var(--muted)}
-    .cal-day .tag{position:absolute;bottom:6px;left:6px;right:6px}
-    .empty{opacity:0.25}
-    .helper{border:1px solid var(--border);border-radius:12px;padding:10px;background:var(--card)}
-    .chat{display:grid;grid-template-rows:1fr auto;gap:8px;height:320px}
-    .chat-log{overflow:auto;border:1px solid var(--border);border-radius:12px;padding:10px;background:var(--card)}
-    .msg{margin-bottom:8px}
-    .msg .who{font-size:12px;color:var(--muted)}
-    .msg .text{background:var(--panel);display:inline-block;padding:8px 10px;border-radius:10px;margin-top:4px}
-    .chat-input{display:grid;grid-template-columns:1fr auto;gap:8px}
-    footer{padding:16px;color:var(--muted);text-align:center}
-    .inline-icon{opacity:0.9}
-    /* PROFILE */
-    .profile-grid{display:grid;gap:12px}
-    .profile-card{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center}
-    .streak{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-    .streak .badge{background:linear-gradient(135deg, rgba(99,102,241,0.12), rgba(34,197,94,0.12))}
-    /* Theme toggle switch */
-    .switch{
-      position:relative;width:46px;height:26px;background:var(--card);border:1px solid var(--border);border-radius:999px;cursor:pointer
-    }
-    .knob{
-      position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:999px;background:var(--accent-2);transition:left .2s ease
-    }
-    [data-theme="light"] .knob{left:22px;background:var(--accent)}
-  </style>
+    <meta charset="UTF-8">
+    <title>Brain Byte — Academic Collaboration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --card: #1f2937;
+            --muted: #93a4b7;
+            --text: #f8fafc;
+            --accent: #22c55e;
+            --accent-2: #6366f1;
+            --danger: #ef4444;
+            --warn: #f59e0b;
+            --primary: #0ea5e9;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.45);
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --card: #ffffff;
+            --muted: #64748b;
+            --text: #0f172a;
+            --accent: #16a34a;
+            --accent-2: #4f46e5;
+            --danger: #dc2626;
+            --warn: #d97706;
+            --primary: #0284c7;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none
+        }
+
+        .app {
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr
+        }
+
+        /* LOGIN */
+        #loginPage {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(34, 197, 94, 0.15));
+            padding: 24px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 12px 36px var(--shadow);
+            animation: fadeIn .5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-weight: 800
+        }
+
+        .brand .mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35)
+        }
+
+        .login-box h2 {
+            margin: 8px 0 18px 0
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 14px
+        }
+
+        button {
+            padding: 10px 12px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600
+        }
+
+        .btn-primary {
+            background: var(--accent-2);
+            color: #fff
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text)
+        }
+
+        .helper {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 10px
+        }
+
+        .sep {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 0
+        }
+
+        /* TOP BAR */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: saturate(1.2) blur(8px);
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800
+        }
+
+        .logo .mark {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35)
+        }
+
+        .invite {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .pill {
+            background: rgba(99, 102, 241, 0.12);
+            color: inherit;
+            border: 1px dashed var(--border);
+            padding: 8px 10px;
+            border-radius: 999px;
+            font-size: 12px
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .icon-btn {
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 8px;
+            cursor: pointer
+        }
+
+        .notif-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 6px
+        }
+
+        nav.tabs {
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px;
+            overflow: auto;
+            border-top: 1px solid var(--border)
+        }
+
+        .tab {
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            white-space: nowrap
+        }
+
+        .tab.active {
+            background: var(--card);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.25) inset
+        }
+
+        main {
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%
+        }
+
+        /* CARDS + GRID */
+        .grid {
+            display: grid;
+            gap: 12px
+        }
+
+        .grid.cards {
+            grid-template-columns: 1fr
+        }
+
+        @media(min-width:768px) {
+            .grid.cards {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(min-width:1024px) {
+            .grid.cards {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            position: relative;
+            box-shadow: 0 8px 28px var(--shadow)
+        }
+
+        .card h3 {
+            margin: 0 0 8px 0;
+            font-size: 16px
+        }
+
+        .card .sub {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: -2px
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(2, 6, 23, 0.06);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-top: 8px
+        }
+
+        .progress .bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #34d399);
+            width: 0%;
+            transition: width .3s ease;
+            border-right: 1px solid rgba(0, 0, 0, 0.1)
+        }
+
+        .list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px
+        }
+
+        .item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--card)
+        }
+
+        .item .title {
+            font-weight: 600
+        }
+
+        .item .meta {
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .item .actions {
+            display: flex;
+            gap: 6px
+        }
+
+        .chk {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--muted);
+            border-radius: 6px;
+            display: grid;
+            place-items: center;
+            cursor: pointer
+        }
+
+        .chk.done {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #052e1a
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.04)
+        }
+
+        .badge.warn {
+            color: #fde68a;
+            border-color: #fde68a;
+            background: rgba(245, 158, 11, 0.12)
+        }
+
+        .badge.danger {
+            color: #fecaca;
+            border-color: #fecaca;
+            background: rgba(239, 68, 68, 0.12)
+        }
+
+        .badge.ok {
+            color: #d1fae5;
+            border-color: #d1fae5;
+            background: rgba(34, 197, 94, 0.12)
+        }
+
+        .notice {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--card)
+        }
+
+        .pin {
+            color: #fde68a
+        }
+
+        .searchbar {
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 8px;
+            margin-bottom: 12px
+        }
+
+        .faculty {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: 1fr
+        }
+
+        @media(min-width:600px) {
+            .faculty {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(min-width:900px) {
+            .faculty {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        .fac-card {
+            display: grid;
+            grid-template-columns: 56px 1fr auto;
+            gap: 10px;
+            align-items: center;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px
+        }
+
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #334155, #1f2937);
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            color: #cbd5e1
+        }
+
+        .cal {
+            display: grid;
+            gap: 8px
+        }
+
+        .cal .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px
+        }
+
+        .cal-day {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            background: var(--card);
+            min-height: 72px;
+            position: relative
+        }
+
+        .cal-day .num {
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .cal-day .tag {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            right: 6px
+        }
+
+        .empty {
+            opacity: 0.25
+        }
+
+        .helper {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+            background: var(--card)
+        }
+
+        .chat {
+            display: grid;
+            grid-template-rows: 1fr auto;
+            gap: 8px;
+            height: 320px
+        }
+
+        .chat-log {
+            overflow: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+            background: var(--card)
+        }
+
+        .msg {
+            margin-bottom: 8px
+        }
+
+        .msg .who {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .msg .text {
+            background: var(--panel);
+            display: inline-block;
+            padding: 8px 10px;
+            border-radius: 10px;
+            margin-top: 4px
+        }
+
+        .chat-input {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px
+        }
+
+        footer {
+            padding: 16px;
+            color: var(--muted);
+            text-align: center
+        }
+
+        .inline-icon {
+            opacity: 0.9
+        }
+
+        /* PROFILE */
+        .profile-grid {
+            display: grid;
+            gap: 12px
+        }
+
+        .profile-card {
+            display: grid;
+            grid-template-columns: 72px 1fr auto;
+            gap: 12px;
+            align-items: center
+        }
+
+        .streak {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px
+        }
+
+        .streak .badge {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(34, 197, 94, 0.12))
+        }
+
+        /* Theme toggle switch */
+        .switch {
+            position: relative;
+            width: 46px;
+            height: 26px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            cursor: pointer
+        }
+
+        .knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            background: var(--accent-2);
+            transition: left .2s ease
+        }
+
+        [data-theme="light"] .knob {
+            left: 22px;
+            background: var(--accent)
+        }
+    </style>
 </head>
+
 <body>
-  <!-- LOGIN PAGE -->
-  <div id="loginPage">
-    <div class="login-box">
-      <div class="brand"><div class="mark">AC</div>Brain Byte Academic Collebration</div>
-      <h2>Welcome back</h2>
-      <form id="loginForm">
-        <input type="email" id="email" placeholder="College email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <div class="row">
-          <select id="courseSelect" required>
-            <option value="">Select course</option>
-            <option>B.Tech Computer Science</option>
-            <option>BCA</option>
-            <option>MBA</option>
-          </select>
-          <select id="sectionSelect" required>
-            <option value="">Section</option>
-            <option>A</option><option>B</option><option>C</option>
-          </select>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage">
+        <div class="login-box">
+            <div class="brand">
+                <div class="mark">AC</div>Brain Byte Academic Collebration
+            </div>
+            <h2>Welcome back</h2>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="College email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <div class="row">
+                    <select id="courseSelect" required>
+                        <option value="">Select course</option>
+                        <option>B.Tech Computer Science</option>
+                        <option>BCA</option>
+                        <option>MBA</option>
+                    </select>
+                    <select id="sectionSelect" required>
+                        <option value="">Section</option>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                </div>
+                <button class="btn-primary" type="submit">Login</button>
+            </form>
+            <div class="helper">By continuing you join your course + section group. Invite link is auto-generated.</div>
+            <div class="sep"></div>
+            <div class="row" style="align-items:center;justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:8px">
+                    <div class="switch" id="themeSwitch" title="Toggle theme">
+                        <div class="knob"></div>
+                    </div>
+                    <span class="helper">Theme</span>
+                </div>
+                <button class="btn-ghost" id="skipLogin">Explore demo</button>
+            </div>
         </div>
-        <button class="btn-primary" type="submit">Login</button>
-      </form>
-      <div class="helper">By continuing you join your course + section group. Invite link is auto-generated.</div>
-      <div class="sep"></div>
-      <div class="row" style="align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="switch" id="themeSwitch" title="Toggle theme">
-            <div class="knob"></div>
-          </div>
-          <span class="helper">Theme</span>
-        </div>
-        <button class="btn-ghost" id="skipLogin">Explore demo</button>
-      </div>
     </div>
-  </div>
 
-  <!-- APP -->
-  <div class="app" id="appRoot" style="display:none">
-    <header>
-      <div class="topbar">
-        <div class="logo">
-          <div class="mark">CF</div>
-          CampusFlow
-          <span class="sub" style="font-weight:500;color:var(--muted)">Structured alternative to WhatsApp groups</span>
-        </div>
-        <div class="invite">
-          <span class="pill" id="groupPill">Group: —</span>
-          <button class="btn-ghost icon-btn" id="copyInvite" title="Copy invite link">🔗</button>
-          <button class="icon-btn" id="switchGroup" title="Switch group">🔄</button>
-        </div>
-        <div class="toolbar">
-          <button class="icon-btn" id="notifBtn" title="Notifications">🔔 <span class="notif-dot" id="notifDot" style="display:none"></span></button>
-          <button class="icon-btn" id="themeBtn" title="Toggle theme">🌓</button>
-          <button class="icon-btn" id="profileBtn" title="Profile">👤</button>
-        </div>
-      </div>
-      <nav class="tabs" id="tabs">
-        <button class="tab active" data-view="dashboard">Dashboard</button>
-        <button class="tab" data-view="subjects">Subjects</button>
-        <button class="tab" data-view="notices">Notice board</button>
-        <button class="tab" data-view="faculty">Faculty</button>
-        <button class="tab" data-view="calendar">Calendar</button>
-        <button class="tab" data-view="chatbot">AI assistant</button>
-        <button class="tab" data-view="profile">Profile</button>
-        <button class="tab" data-view="settings">Settings</button>
-      </nav>
-    </header>
-
-    <main>
-      <!-- DASHBOARD -->
-      <section id="view-dashboard">
-        <div class="grid cards">
-          <div class="card">
-            <h3>Pending assignments</h3>
-            <div class="sub">Your tasks across all subjects</div>
-            <div class="progress"><div class="bar" id="overallProgress"></div></div>
-            <div class="list" id="pendingList"></div>
-          </div>
-
-          <div class="card">
-            <h3>Upcoming deadlines</h3>
-            <div class="sub">Next 7 days</div>
-            <div class="list" id="deadlinesList"></div>
-          </div>
-
-          <div class="card">
-            <h3>Latest notices</h3>
-            <div class="sub">Pinned announcements stay on top</div>
-            <div class="notice">
-              <span class="pin">📌</span>
-              <div>
-                <div class="title" id="pinnedNoticeTitle">Mid-sem timetable released</div>
-                <div class="summary" id="pinnedNoticeSummary">AI summary will appear here.</div>
-              </div>
+    <!-- APP -->
+    <div class="app" id="appRoot" style="display:none">
+        <header>
+            <div class="topbar">
+                <div class="logo">
+                    <div class="mark">CF</div>
+                    CampusFlow
+                    <span class="sub" style="font-weight:500;color:var(--muted)">Structured alternative to WhatsApp
+                        groups</span>
+                </div>
+                <div class="invite">
+                    <span class="pill" id="groupPill">Group: —</span>
+                    <button class="btn-ghost icon-btn" id="copyInvite" title="Copy invite link">🔗</button>
+                    <button class="icon-btn" id="switchGroup" title="Switch group">🔄</button>
+                </div>
+                <div class="toolbar">
+                    <button class="icon-btn" id="notifBtn" title="Notifications">🔔 <span class="notif-dot"
+                            id="notifDot" style="display:none"></span></button>
+                    <button class="icon-btn" id="themeBtn" title="Toggle theme">🌓</button>
+                    <button class="icon-btn" id="profileBtn" title="Profile">👤</button>
+                </div>
             </div>
-            <div class="list" id="latestNotices"></div>
-          </div>
-        </div>
+            <nav class="tabs" id="tabs">
+                <button class="tab active" data-view="dashboard">Dashboard</button>
+                <button class="tab" data-view="subjects">Subjects</button>
+                <button class="tab" data-view="notices">Notice board</button>
+                <button class="tab" data-view="faculty">Faculty</button>
+                <button class="tab" data-view="calendar">Calendar</button>
+                <button class="tab" data-view="chatbot">AI assistant</button>
+                <button class="tab" data-view="profile">Profile</button>
+                <button class="tab" data-view="settings">Settings</button>
+            </nav>
+        </header>
 
-        <div class="grid" style="margin-top:12px">
-          <div class="card helper">
-            <h3>Smart reminders</h3>
-            <div id="reminders"></div>
-          </div>
-        </div>
-      </section>
+        <main>
+            <!-- DASHBOARD -->
+            <section id="view-dashboard">
+                <div class="grid cards">
+                    <div class="card">
+                        <h3>Pending assignments</h3>
+                        <div class="sub">Your tasks across all subjects</div>
+                        <div class="progress">
+                            <div class="bar" id="overallProgress"></div>
+                        </div>
+                        <div class="list" id="pendingList"></div>
+                    </div>
 
-      <!-- SUBJECTS -->
-      <section id="view-subjects" style="display:none">
-        <div class="searchbar">
-          <input type="text" id="searchInput" placeholder="Search assignments, homework, notes">
-          <select id="subjectFilter">
-            <option value="all">All subjects</option>
-          </select>
-          <select id="dateFilter">
-            <option value="all">Any due date</option>
-            <option value="today">Due today</option>
-            <option value="week">Due this week</option>
-            <option value="overdue">Overdue</option>
-          </select>
-          <select id="statusFilter">
-            <option value="all">All status</option>
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
-          </select>
-        </div>
-        <div id="subjectsContainer"></div>
-      </section>
+                    <div class="card">
+                        <h3>Upcoming deadlines</h3>
+                        <div class="sub">Next 7 days</div>
+                        <div class="list" id="deadlinesList"></div>
+                    </div>
 
-      <!-- NOTICES -->
-      <section id="view-notices" style="display:none">
-        <div class="grid cards">
-          <div class="card">
-            <h3>Pinned</h3>
-            <div class="notice">
-              <span class="pin">📌</span>
-              <div>
-                <div class="title" id="pinnedTitle2">Campus hackathon — registrations open</div>
-                <div class="summary" id="pinnedSummary2"></div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <h3>All notices</h3>
-            <div class="list" id="noticesList"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- FACULTY -->
-      <section id="view-faculty" style="display:none">
-        <div class="grid">
-          <div class="card">
-            <h3>Faculty directory</h3>
-            <div class="sub">Mentors, subjects taught, and contacts</div>
-            <div class="faculty" id="facultyGrid"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CALENDAR -->
-      <section id="view-calendar" style="display:none">
-        <div class="grid">
-          <div class="card">
-            <h3>Academic calendar</h3>
-            <div class="sub">Holidays, exams, and submissions</div>
-            <div class="cal">
-              <div class="head">
-                <div>
-                  <span id="calMonth" style="font-weight:700"></span>
-                  <span class="sub" id="calYear"></span>
+                    <div class="card">
+                        <h3>Latest notices</h3>
+                        <div class="sub">Pinned announcements stay on top</div>
+                        <div class="notice">
+                            <span class="pin">📌</span>
+                            <div>
+                                <div class="title" id="pinnedNoticeTitle">Mid-sem timetable released</div>
+                                <div class="summary" id="pinnedNoticeSummary">AI summary will appear here.</div>
+                            </div>
+                        </div>
+                        <div class="list" id="latestNotices"></div>
+                    </div>
                 </div>
-                <div style="display:flex;gap:8px">
-                  <button class="btn-ghost" id="prevMonth">◀</button>
-                  <button class="btn-ghost" id="nextMonth">▶</button>
+
+                <div class="grid" style="margin-top:12px">
+                    <div class="card helper">
+                        <h3>Smart reminders</h3>
+                        <div id="reminders"></div>
+                    </div>
                 </div>
-              </div>
-              <div class="cal-grid" id="calendarGrid"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+            </section>
 
-      <!-- CHATBOT -->
-      <section id="view-chatbot" style="display:none">
-        <div class="grid">
-          <div class="card">
-            <h3>AI assistant</h3>
-            <div class="sub">Ask: “What homework is pending?” or “What is the next deadline?”</div>
-            <div class="chat">
-              <div class="chat-log" id="chatLog"></div>
-              <div class="chat-input">
-                <input type="text" id="chatInput" placeholder="Type your question…">
-                <button class="btn-primary" id="sendChat">Ask</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PROFILE -->
-      <section id="view-profile" style="display:none">
-        <div class="grid">
-          <div class="card">
-            <h3>Your profile</h3>
-            <div class="sub">Update your info, see progress and streaks</div>
-            <div class="profile-grid">
-              <div class="item profile-card">
-                <div class="avatar" id="pfAvatar">U</div>
-                <div>
-                  <div class="title" style="font-weight:700" id="pfName">Student Name</div>
-                  <div class="meta" id="pfEmail">student@college.edu</div>
-                  <div class="meta" id="pfCourse">Course — Section</div>
-                  <div class="streak">
-                    <span class="badge">🔥 Streak: <span id="pfStreak">3</span> days</span>
-                    <span class="badge">🏆 Badges: On-time, Pro Organizer</span>
-                  </div>
+            <!-- SUBJECTS -->
+            <section id="view-subjects" style="display:none">
+                <div class="searchbar">
+                    <input type="text" id="searchInput" placeholder="Search assignments, homework, notes">
+                    <select id="subjectFilter">
+                        <option value="all">All subjects</option>
+                    </select>
+                    <select id="dateFilter">
+                        <option value="all">Any due date</option>
+                        <option value="today">Due today</option>
+                        <option value="week">Due this week</option>
+                        <option value="overdue">Overdue</option>
+                    </select>
+                    <select id="statusFilter">
+                        <option value="all">All status</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                    </select>
                 </div>
-                <div><button class="btn-ghost" id="editProfileBtn">Edit</button></div>
-              </div>
-              <div class="item">
-                <span>📈</span>
-                <div>
-                  <div class="title">Assignment progress</div>
-                  <div class="progress"><div class="bar" id="pfProgressBar" style="width:0%"></div></div>
-                  <div class="meta" id="pfProgressText">0% completed</div>
+                <div id="subjectsContainer"></div>
+            </section>
+
+            <!-- NOTICES -->
+            <section id="view-notices" style="display:none">
+                <div class="grid cards">
+                    <div class="card">
+                        <h3>Pinned</h3>
+                        <div class="notice">
+                            <span class="pin">📌</span>
+                            <div>
+                                <div class="title" id="pinnedTitle2">Campus hackathon — registrations open</div>
+                                <div class="summary" id="pinnedSummary2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>All notices</h3>
+                        <div class="list" id="noticesList"></div>
+                    </div>
                 </div>
-                <div class="actions">
-                  <span class="badge ok" id="pfOnTime">On-time rate: 100%</span>
+            </section>
+
+            <!-- FACULTY -->
+            <section id="view-faculty" style="display:none">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Faculty directory</h3>
+                        <div class="sub">Mentors, subjects taught, and contacts</div>
+                        <div class="faculty" id="facultyGrid"></div>
+                    </div>
                 </div>
-              </div>
-              <div class="item">
-                <span>🗂️</span>
-                <div>
-                  <div class="title">Groups</div>
-                  <div class="meta" id="pfGroups">B.Tech CS • Section A</div>
+            </section>
+
+            <!-- CALENDAR -->
+            <section id="view-calendar" style="display:none">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Academic calendar</h3>
+                        <div class="sub">Holidays, exams, and submissions</div>
+                        <div class="cal">
+                            <div class="head">
+                                <div>
+                                    <span id="calMonth" style="font-weight:700"></span>
+                                    <span class="sub" id="calYear"></span>
+                                </div>
+                                <div style="display:flex;gap:8px">
+                                    <button class="btn-ghost" id="prevMonth">◀</button>
+                                    <button class="btn-ghost" id="nextMonth">▶</button>
+                                </div>
+                            </div>
+                            <div class="cal-grid" id="calendarGrid"></div>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn-ghost" id="pfSwitch">Switch</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            </section>
 
-      <!-- SETTINGS -->
-      <section id="view-settings" style="display:none">
-        <div class="grid">
-          <div class="card">
-            <h3>Settings</h3>
-            <div class="list">
-              <div class="item">
-                <span>🌓</span>
-                <div>
-                  <div class="title">Theme</div>
-                  <div class="meta">Toggle dark / light</div>
+            <!-- CHATBOT -->
+            <section id="view-chatbot" style="display:none">
+                <div class="grid">
+                    <div class="card">
+                        <h3>AI assistant</h3>
+                        <div class="sub">Ask: “What homework is pending?” or “What is the next deadline?”</div>
+                        <div class="chat">
+                            <div class="chat-log" id="chatLog"></div>
+                            <div class="chat-input">
+                                <input type="text" id="chatInput" placeholder="Type your question…">
+                                <button class="btn-primary" id="sendChat">Ask</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="switch" id="settingsThemeSwitch"><div class="knob"></div></div>
-              </div>
-              <div class="item">
-                <span>🔔</span>
-                <div>
-                  <div class="title">Smart reminders</div>
-                  <div class="meta">Urgent items within 48 hours</div>
+            </section>
+
+            <!-- PROFILE -->
+            <section id="view-profile" style="display:none">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Your profile</h3>
+                        <div class="sub">Update your info, see progress and streaks</div>
+                        <div class="profile-grid">
+                            <div class="item profile-card">
+                                <div class="avatar" id="pfAvatar">U</div>
+                                <div>
+                                    <div class="title" style="font-weight:700" id="pfName">Student Name</div>
+                                    <div class="meta" id="pfEmail">student@college.edu</div>
+                                    <div class="meta" id="pfCourse">Course — Section</div>
+                                    <div class="streak">
+                                        <span class="badge">🔥 Streak: <span id="pfStreak">3</span> days</span>
+                                        <span class="badge">🏆 Badges: On-time, Pro Organizer</span>
+                                    </div>
+                                </div>
+                                <div><button class="btn-ghost" id="editProfileBtn">Edit</button></div>
+                            </div>
+                            <div class="item">
+                                <span>📈</span>
+                                <div>
+                                    <div class="title">Assignment progress</div>
+                                    <div class="progress">
+                                        <div class="bar" id="pfProgressBar" style="width:0%"></div>
+                                    </div>
+                                    <div class="meta" id="pfProgressText">0% completed</div>
+                                </div>
+                                <div class="actions">
+                                    <span class="badge ok" id="pfOnTime">On-time rate: 100%</span>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <span>🗂️</span>
+                                <div>
+                                    <div class="title">Groups</div>
+                                    <div class="meta" id="pfGroups">B.Tech CS • Section A</div>
+                                </div>
+                                <button class="btn-ghost" id="pfSwitch">Switch</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn-ghost" id="testReminder">Test</button>
-              </div>
-              <div class="item">
-                <span>🧹</span>
-                <div>
-                  <div class="title">Reset progress</div>
-                  <div class="meta">Clear local completion data</div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section id="view-settings" style="display:none">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Settings</h3>
+                        <div class="list">
+                            <div class="item">
+                                <span>🌓</span>
+                                <div>
+                                    <div class="title">Theme</div>
+                                    <div class="meta">Toggle dark / light</div>
+                                </div>
+                                <div class="switch" id="settingsThemeSwitch">
+                                    <div class="knob"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <span>🔔</span>
+                                <div>
+                                    <div class="title">Smart reminders</div>
+                                    <div class="meta">Urgent items within 48 hours</div>
+                                </div>
+                                <button class="btn-ghost" id="testReminder">Test</button>
+                            </div>
+                            <div class="item">
+                                <span>🧹</span>
+                                <div>
+                                    <div class="title">Reset progress</div>
+                                    <div class="meta">Clear local completion data</div>
+                                </div>
+                                <button class="btn-ghost" id="resetProgress">Reset</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn-ghost" id="resetProgress">Reset</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+            </section>
+        </main>
 
-    <footer>
-      Brain Byte @ 2026 Academic Collebration
-    </footer>
-  </div>
+        <footer>
+            Brain Byte @ 2026 Academic Collebration
+        </footer>
+    </div>
 
-  <script>
-    // ----- Mock data -----
-    let group = { course: "", section: "", inviteLink: "" };
-    const subjects = [
-      { code:"CS201", name:"Data Structures" },
-      { code:"CS204", name:"Operating Systems" },
-      { code:"MA210", name:"Discrete Mathematics" },
-      { code:"HS105", name:"Professional Communication" }
-    ];
-    const assignments = [
-      { id:"a1", subject:"CS201", type:"Assignment", title:"Implement Linked List operations", due:"2026-01-08", tags:["DS","coding"], points:10 },
-      { id:"a2", subject:"CS201", type:"Homework", title:"Solve stack vs queue problems", due:"2026-01-07", tags:["practice"], points:5 },
-      { id:"a3", subject:"CS204", type:"Lab", title:"Process scheduling simulator", due:"2026-01-10", tags:["lab","CPU"], points:15 },
-      { id:"a4", subject:"MA210", type:"Assignment", title:"Graph theory: shortest paths set", due:"2026-01-06", tags:["overdue","math"], points:10 },
-      { id:"a5", subject:"HS105", type:"Notes", title:"Prepare slides: Group discussion", due:"2026-01-09", tags:["presentation"], points:5 }
-    ];
-    const homeworkNotes = {
-      "CS201":[
-        { kind:"Notes", title:"Complexity cheatsheet", url:"#", aiTag:["notes","complexity"] },
-        { kind:"Homework", title:"LeetCode week 1", url:"#", aiTag:["practice","coding"] }
-      ],
-      "CS204":[
-        { kind:"Homework", title:"File systems reading", url:"#", aiTag:["reading","FS"] }
-      ],
-      "MA210":[
-        { kind:"Notes", title:"Combinatorics reference", url:"#", aiTag:["notes","combinatorics"] }
-      ],
-      "HS105":[
-        { kind:"Homework", title:"Elevator pitch draft", url:"#", aiTag:["communication"] }
-      ]
-    };
-    const notices = [
-      { id:"n1", title:"Mid-sem timetable released", body:"Mid-semester exam schedule for all departments is released. Check the portal for date-wise timetable and seating.", date:"2026-01-06", pinned:true },
-      { id:"n2", title:"Campus hackathon — registrations open", body:"48-hour hackathon is scheduled next week. Teams of 3-5. Problem statements will be shared on kickoff.", date:"2026-01-05", pinned:true },
-      { id:"n3", title:"Library hours extended", body:"Library remains open till 10 PM during exams. Quiet spaces on 2nd floor.", date:"2026-01-04" },
-      { id:"n4", title:"Lab maintenance", body:"CS lab 2 will be offline on Friday 12–2 PM for scheduled maintenance.", date:"2026-01-03" }
-    ];
-    const faculty = [
-      { name:"Dr. A. Mehta", subject:"Data Structures", email:"amehta@college.edu", phone:"+91 98765 43210" },
-      { name:"Prof. R. Iyer", subject:"Operating Systems", email:"riyer@college.edu", phone:"+91 99876 12345" },
-      { name:"Dr. S. Rao", subject:"Discrete Mathematics", email:"srao@college.edu", phone:"+91 91234 56789" },
-      { name:"Ms. P. Kaur", subject:"Professional Communication", email:"pkaur@college.edu", phone:"+91 97654 32109" }
-    ];
-    const calendarEvents = [
-      { date:"2026-01-07", kind:"submission", label:"Stacks & Queues due" },
-      { date:"2026-01-08", kind:"submission", label:"Linked List assignment due" },
-      { date:"2026-01-10", kind:"exam", label:"OS Lab submission" },
-      { date:"2026-01-12", kind:"holiday", label:"Campus Day" }
-    ];
+    <script>
+        // ----- Mock data -----
+        let group = { course: "", section: "", inviteLink: "" };
+        const subjects = [
+            { code: "CS201", name: "Data Structures" },
+            { code: "CS204", name: "Operating Systems" },
+            { code: "MA210", name: "Discrete Mathematics" },
+            { code: "HS105", name: "Professional Communication" }
+        ];
+        const assignments = [
+            { id: "a1", subject: "CS201", type: "Assignment", title: "Implement Linked List operations", due: "2026-01-08", tags: ["DS", "coding"], points: 10 },
+            { id: "a2", subject: "CS201", type: "Homework", title: "Solve stack vs queue problems", due: "2026-01-07", tags: ["practice"], points: 5 },
+            { id: "a3", subject: "CS204", type: "Lab", title: "Process scheduling simulator", due: "2026-01-10", tags: ["lab", "CPU"], points: 15 },
+            { id: "a4", subject: "MA210", type: "Assignment", title: "Graph theory: shortest paths set", due: "2026-01-06", tags: ["overdue", "math"], points: 10 },
+            { id: "a5", subject: "HS105", type: "Notes", title: "Prepare slides: Group discussion", due: "2026-01-09", tags: ["presentation"], points: 5 }
+        ];
+        const homeworkNotes = {
+            "CS201": [
+                { kind: "Notes", title: "Complexity cheatsheet", url: "#", aiTag: ["notes", "complexity"] },
+                { kind: "Homework", title: "LeetCode week 1", url: "#", aiTag: ["practice", "coding"] }
+            ],
+            "CS204": [
+                { kind: "Homework", title: "File systems reading", url: "#", aiTag: ["reading", "FS"] }
+            ],
+            "MA210": [
+                { kind: "Notes", title: "Combinatorics reference", url: "#", aiTag: ["notes", "combinatorics"] }
+            ],
+            "HS105": [
+                { kind: "Homework", title: "Elevator pitch draft", url: "#", aiTag: ["communication"] }
+            ]
+        };
+        const notices = [
+            { id: "n1", title: "Mid-sem timetable released", body: "Mid-semester exam schedule for all departments is released. Check the portal for date-wise timetable and seating.", date: "2026-01-06", pinned: true },
+            { id: "n2", title: "Campus hackathon — registrations open", body: "48-hour hackathon is scheduled next week. Teams of 3-5. Problem statements will be shared on kickoff.", date: "2026-01-05", pinned: true },
+            { id: "n3", title: "Library hours extended", body: "Library remains open till 10 PM during exams. Quiet spaces on 2nd floor.", date: "2026-01-04" },
+            { id: "n4", title: "Lab maintenance", body: "CS lab 2 will be offline on Friday 12–2 PM for scheduled maintenance.", date: "2026-01-03" }
+        ];
+        const faculty = [
+            { name: "Dr. A. Mehta", subject: "Data Structures", email: "amehta@college.edu", phone: "+91 98765 43210" },
+            { name: "Prof. R. Iyer", subject: "Operating Systems", email: "riyer@college.edu", phone: "+91 99876 12345" },
+            { name: "Dr. S. Rao", subject: "Discrete Mathematics", email: "srao@college.edu", phone: "+91 91234 56789" },
+            { name: "Ms. P. Kaur", subject: "Professional Communication", email: "pkaur@college.edu", phone: "+91 97654 32109" }
+        ];
+        const calendarEvents = [
+            { date: "2026-01-07", kind: "submission", label: "Stacks & Queues due" },
+            { date: "2026-01-08", kind: "submission", label: "Linked List assignment due" },
+            { date: "2026-01-10", kind: "exam", label: "OS Lab submission" },
+            { date: "2026-01-12", kind: "holiday", label: "Campus Day" }
+        ];
 
-    // ----- State -----
-    const state = {
-      completed: JSON.parse(localStorage.getItem("cf_completed")||"[]"),
-      subjectFilter:"all",
-      dateFilter:"all",
-      statusFilter:"all",
-      query:"",
-      theme: localStorage.getItem("cf_theme") || "dark",
-      streak: Number(localStorage.getItem("cf_streak")||"3"),
-      name: localStorage.getItem("cf_name") || "Student Name",
-      email: localStorage.getItem("cf_email") || "student@college.edu"
-    };
-    const fixedNow = "2026-01-06T16:05:00+05:30";
-    const today = new Date(fixedNow);
+        // ----- State -----
+        const state = {
+            completed: JSON.parse(localStorage.getItem("cf_completed") || "[]"),
+            subjectFilter: "all",
+            dateFilter: "all",
+            statusFilter: "all",
+            query: "",
+            theme: localStorage.getItem("cf_theme") || "dark",
+            streak: Number(localStorage.getItem("cf_streak") || "3"),
+            name: localStorage.getItem("cf_name") || "Student Name",
+            email: localStorage.getItem("cf_email") || "student@college.edu"
+        };
+        const fixedNow = "2026-01-06T16:05:00+05:30";
+        const today = new Date(fixedNow);
 
-    // ----- Utilities -----
-    const fmtDate = d => new Date(d).toLocaleDateString(undefined,{month:"short",day:"numeric"});
-    const daysDiff = d => Math.ceil((new Date(d)-today)/(1000*60*60*24));
-    const isOverdue = d => new Date(d) < today;
-    const inNext7Days = d => daysDiff(d)>=0 && daysDiff(d)<=7;
-    const capitalize = s => s ? s[0].toUpperCase()+s.slice(1) : s;
+        // ----- Utilities -----
+        const fmtDate = d => new Date(d).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+        const daysDiff = d => Math.ceil((new Date(d) - today) / (1000 * 60 * 60 * 24));
+        const isOverdue = d => new Date(d) < today;
+        const inNext7Days = d => daysDiff(d) >= 0 && daysDiff(d) <= 7;
+        const capitalize = s => s ? s[0].toUpperCase() + s.slice(1) : s;
 
-    function saveProgress(){ localStorage.setItem("cf_completed", JSON.stringify(state.completed)); }
-    function aiSummarize(text){
-      const first = text.split(".")[0].trim();
-      const keywords = (text.match(/\b(exam|schedule|teams|maintenance|hours|due|portal|hackathon|seating)\b/gi)||[])
-        .slice(0,3).map(k=>k.toLowerCase());
-      return `${first}. Key: ${[...new Set(keywords)].join(", ") || "info"}`;
-    }
-    function aiAutoTag(item){
-      const title = item.title.toLowerCase();
-      const tags = [];
-      if(title.includes("stack")||title.includes("queue")) tags.push("data-structures");
-      if(title.includes("linked list")) tags.push("data-structures");
-      if(title.includes("scheduling")||title.includes("process")) tags.push("os");
-      if(title.includes("graph")||title.includes("shortest")) tags.push("math");
-      if(title.includes("pitch")||title.includes("discussion")) tags.push("communication");
-      if(isOverdue(item.due)) tags.push("overdue");
-      return tags.length?tags:["general"];
-    }
-    function icon(kind){
-      if(kind==="overdue") return "⏰";
-      if(kind==="submission") return "📝";
-      if(kind==="exam") return "📚";
-      if(kind==="holiday") return "🎉";
-      return "📌";
-    }
+        function saveProgress() { localStorage.setItem("cf_completed", JSON.stringify(state.completed)); }
+        function aiSummarize(text) {
+            const first = text.split(".")[0].trim();
+            const keywords = (text.match(/\b(exam|schedule|teams|maintenance|hours|due|portal|hackathon|seating)\b/gi) || [])
+                .slice(0, 3).map(k => k.toLowerCase());
+            return `${first}. Key: ${[...new Set(keywords)].join(", ") || "info"}`;
+        }
+        function aiAutoTag(item) {
+            const title = item.title.toLowerCase();
+            const tags = [];
+            if (title.includes("stack") || title.includes("queue")) tags.push("data-structures");
+            if (title.includes("linked list")) tags.push("data-structures");
+            if (title.includes("scheduling") || title.includes("process")) tags.push("os");
+            if (title.includes("graph") || title.includes("shortest")) tags.push("math");
+            if (title.includes("pitch") || title.includes("discussion")) tags.push("communication");
+            if (isOverdue(item.due)) tags.push("overdue");
+            return tags.length ? tags : ["general"];
+        }
+        function icon(kind) {
+            if (kind === "overdue") return "⏰";
+            if (kind === "submission") return "📝";
+            if (kind === "exam") return "📚";
+            if (kind === "holiday") return "🎉";
+            return "📌";
+        }
 
-    // ----- Theme -----
-    function applyTheme(){
-      document.documentElement.setAttribute("data-theme", state.theme);
-      localStorage.setItem("cf_theme", state.theme);
-    }
-    function toggleTheme(){
-      state.theme = state.theme === "dark" ? "light" : "dark";
-      applyTheme();
-    }
-    applyTheme();
+        // ----- Theme -----
+        function applyTheme() {
+            document.documentElement.setAttribute("data-theme", state.theme);
+            localStorage.setItem("cf_theme", state.theme);
+        }
+        function toggleTheme() {
+            state.theme = state.theme === "dark" ? "light" : "dark";
+            applyTheme();
+        }
+        applyTheme();
 
-    // ----- Login -----
-    function buildInviteLink(course, section){
-      const slugC = encodeURIComponent(course.split(" ")[0]);
-      const slugS = encodeURIComponent(section);
-      return `https://campusflow.example/join?course=${slugC}&section=${slugS}`;
-    }
-    function afterLogin(){
-      document.getElementById("loginPage").style.display="none";
-      document.getElementById("appRoot").style.display="grid";
-      document.getElementById("groupPill").textContent = `Group: ${group.course} • Section ${group.section}`;
-      renderAll();
-      notifyDot(true);
-      fillProfile();
-    }
-    document.getElementById("loginForm").addEventListener("submit",(e)=>{
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const pass = document.getElementById("password").value.trim();
-      const course = document.getElementById("courseSelect").value.trim();
-      const section = document.getElementById("sectionSelect").value.trim();
-      if(!email || !pass || !course || !section){
-        alert("Please fill email, password, course and section.");
-        return;
-      }
-      state.name = email.split("@")[0].replace(/\./g," ");
-      state.email = email;
-      localStorage.setItem("cf_name", state.name);
-      localStorage.setItem("cf_email", state.email);
-      group = { course, section, inviteLink: buildInviteLink(course, section) };
-      afterLogin();
-    });
-    document.getElementById("skipLogin").addEventListener("click",()=>{
-      group = { course:"B.Tech Computer Science", section:"A", inviteLink: buildInviteLink("B.Tech CS","A") };
-      afterLogin();
-    });
-    document.getElementById("themeSwitch").addEventListener("click",()=>{
-      toggleTheme();
-    });
+        // ----- Login -----
+        function buildInviteLink(course, section) {
+            const slugC = encodeURIComponent(course.split(" ")[0]);
+            const slugS = encodeURIComponent(section);
+            return `https://campusflow.example/join?course=${slugC}&section=${slugS}`;
+        }
+        function afterLogin() {
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("appRoot").style.display = "grid";
+            document.getElementById("groupPill").textContent = `Group: ${group.course} • Section ${group.section}`;
+            renderAll();
+            notifyDot(true);
+            fillProfile();
+        }
+        document.getElementById("loginForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value.trim();
+            const pass = document.getElementById("password").value.trim();
+            const course = document.getElementById("courseSelect").value.trim();
+            const section = document.getElementById("sectionSelect").value.trim();
+            if (!email || !pass || !course || !section) {
+                alert("Please fill email, password, course and section.");
+                return;
+            }
+            state.name = email.split("@")[0].replace(/\./g, " ");
+            state.email = email;
+            localStorage.setItem("cf_name", state.name);
+            localStorage.setItem("cf_email", state.email);
+            group = { course, section, inviteLink: buildInviteLink(course, section) };
+            afterLogin();
+        });
+        document.getElementById("skipLogin").addEventListener("click", () => {
+            group = { course: "B.Tech Computer Science", section: "A", inviteLink: buildInviteLink("B.Tech CS", "A") };
+            afterLogin();
+        });
+        document.getElementById("themeSwitch").addEventListener("click", () => {
+            toggleTheme();
+        });
 
-    // ----- Topbar controls -----
-    document.getElementById("copyInvite").addEventListener("click",()=>{
-      if(!group.inviteLink) return alert("Login to generate invite link.");
-      navigator.clipboard.writeText(group.inviteLink);
-      alert("Invite link copied!");
-    });
-    document.getElementById("switchGroup").addEventListener("click",()=>{
-      alert("Prototype: Use Settings > Groups to switch (or revisit login).");
-    });
-    function notifyDot(show){ document.getElementById("notifDot").style.display = show ? "inline-block" : "none"; }
-    document.getElementById("notifBtn").addEventListener("click",()=>{
-      notifyDot(false);
-      alert("Notifications: 2 new notices, 1 assignment due soon.");
-    });
-    document.getElementById("themeBtn").addEventListener("click", toggleTheme);
-    document.getElementById("profileBtn").addEventListener("click",()=>{
-      switchTab("profile");
-    });
+        // ----- Topbar controls -----
+        document.getElementById("copyInvite").addEventListener("click", () => {
+            if (!group.inviteLink) return alert("Login to generate invite link.");
+            navigator.clipboard.writeText(group.inviteLink);
+            alert("Invite link copied!");
+        });
+        document.getElementById("switchGroup").addEventListener("click", () => {
+            alert("Prototype: Use Settings > Groups to switch (or revisit login).");
+        });
+        function notifyDot(show) { document.getElementById("notifDot").style.display = show ? "inline-block" : "none"; }
+        document.getElementById("notifBtn").addEventListener("click", () => {
+            notifyDot(false);
+            alert("Notifications: 2 new notices, 1 assignment due soon.");
+        });
+        document.getElementById("themeBtn").addEventListener("click", toggleTheme);
+        document.getElementById("profileBtn").addEventListener("click", () => {
+            switchTab("profile");
+        });
 
-    // ----- Tabs -----
-    const tabEls = document.querySelectorAll(".tab");
-    tabEls.forEach(t=>{
-      t.addEventListener("click",()=>{
-        switchTab(t.dataset.view);
-      });
-    });
-    function switchTab(view){
-      tabEls.forEach(x=>x.classList.remove("active"));
-      const btn = Array.from(tabEls).find(b=>b.dataset.view===view);
-      if(btn) btn.classList.add("active");
-      document.querySelectorAll("main section").forEach(s=>s.style.display="none");
-      const target = document.querySelector(`#view-${view}`);
-      if(target) target.style.display="block";
-    }
+        // ----- Tabs -----
+        const tabEls = document.querySelectorAll(".tab");
+        tabEls.forEach(t => {
+            t.addEventListener("click", () => {
+                switchTab(t.dataset.view);
+            });
+        });
+        function switchTab(view) {
+            tabEls.forEach(x => x.classList.remove("active"));
+            const btn = Array.from(tabEls).find(b => b.dataset.view === view);
+            if (btn) btn.classList.add("active");
+            document.querySelectorAll("main section").forEach(s => s.style.display = "none");
+            const target = document.querySelector(`#view-${view}`);
+            if (target) target.style.display = "block";
+        }
 
-    // ----- Dashboard rendering -----
-    function renderDashboard(){
-      const pend = assignments.filter(a=>!state.completed.includes(a.id));
-      const comp = assignments.filter(a=>state.completed.includes(a.id));
-      const pct = Math.round((comp.length/assignments.length)*100);
-      document.getElementById("overallProgress").style.width = pct+"%";
+        // ----- Dashboard rendering -----
+        function renderDashboard() {
+            const pend = assignments.filter(a => !state.completed.includes(a.id));
+            const comp = assignments.filter(a => state.completed.includes(a.id));
+            const pct = Math.round((comp.length / assignments.length) * 100);
+            document.getElementById("overallProgress").style.width = pct + "%";
 
-      const listEl = document.getElementById("pendingList");
-      listEl.innerHTML="";
-      pend.sort((a,b)=>new Date(a.due)-new Date(b.due)).forEach(a=>{
-        const overdue = isOverdue(a.due);
-        const div = document.createElement("div");
-        div.className="item";
-        div.innerHTML = `
-          <div class="chk ${state.completed.includes(a.id)?'done':''}" data-id="${a.id}" title="Mark complete">${state.completed.includes(a.id)?'✓':''}</div>
+            const listEl = document.getElementById("pendingList");
+            listEl.innerHTML = "";
+            pend.sort((a, b) => new Date(a.due) - new Date(b.due)).forEach(a => {
+                const overdue = isOverdue(a.due);
+                const div = document.createElement("div");
+                div.className = "item";
+                div.innerHTML = `
+          <div class="chk ${state.completed.includes(a.id) ? 'done' : ''}" data-id="${a.id}" title="Mark complete">${state.completed.includes(a.id) ? '✓' : ''}</div>
           <div>
             <div class="title">${a.title}</div>
             <div class="meta">${a.type} • ${a.subject} • Due ${fmtDate(a.due)}</div>
             <div class="meta">AI tags: ${aiAutoTag(a).join(", ")}</div>
           </div>
           <div class="actions">
-            <span class="badge ${overdue?'danger':inNext7Days(a.due)?'warn':'ok'}">${overdue?'Overdue':inNext7Days(a.due)?'Due soon':'On track'}</span>
+            <span class="badge ${overdue ? 'danger' : inNext7Days(a.due) ? 'warn' : 'ok'}">${overdue ? 'Overdue' : inNext7Days(a.due) ? 'Due soon' : 'On track'}</span>
           </div>
         `;
-        listEl.appendChild(div);
-      });
+                listEl.appendChild(div);
+            });
 
-      // Upcoming deadlines
-      const upcoming = assignments.filter(a=>inNext7Days(a.due)).sort((a,b)=>new Date(a.due)-new Date(b.due));
-      const dlEl = document.getElementById("deadlinesList");
-      dlEl.innerHTML="";
-      upcoming.forEach(a=>{
-        const div = document.createElement("div");
-        div.className="item";
-        div.innerHTML = `
+            // Upcoming deadlines
+            const upcoming = assignments.filter(a => inNext7Days(a.due)).sort((a, b) => new Date(a.due) - new Date(b.due));
+            const dlEl = document.getElementById("deadlinesList");
+            dlEl.innerHTML = "";
+            upcoming.forEach(a => {
+                const div = document.createElement("div");
+                div.className = "item";
+                div.innerHTML = `
           <span class="inline-icon">🗓️</span>
           <div>
             <div class="title">${a.title}</div>
@@ -689,22 +1144,22 @@
           </div>
           <span class="badge warn">Due in ${daysDiff(a.due)} day(s)</span>
         `;
-        dlEl.appendChild(div);
-      });
+                dlEl.appendChild(div);
+            });
 
-      // Latest notices
-      const pin = notices.find(n=>n.pinned);
-      if(pin){
-        document.getElementById("pinnedNoticeTitle").textContent = pin.title;
-        document.getElementById("pinnedNoticeSummary").textContent = aiSummarize(pin.body);
-      }
-      const latest = notices.filter(n=>!n.pinned).slice(0,3);
-      const nEl = document.getElementById("latestNotices");
-      nEl.innerHTML="";
-      latest.forEach(n=>{
-        const div = document.createElement("div");
-        div.className="notice";
-        div.innerHTML = `
+            // Latest notices
+            const pin = notices.find(n => n.pinned);
+            if (pin) {
+                document.getElementById("pinnedNoticeTitle").textContent = pin.title;
+                document.getElementById("pinnedNoticeSummary").textContent = aiSummarize(pin.body);
+            }
+            const latest = notices.filter(n => !n.pinned).slice(0, 3);
+            const nEl = document.getElementById("latestNotices");
+            nEl.innerHTML = "";
+            latest.forEach(n => {
+                const div = document.createElement("div");
+                div.className = "notice";
+                div.innerHTML = `
           <span>📣</span>
           <div>
             <div class="title">${n.title}</div>
@@ -712,88 +1167,88 @@
             <div class="meta">Posted ${fmtDate(n.date)}</div>
           </div>
         `;
-        nEl.appendChild(div);
-      });
+                nEl.appendChild(div);
+            });
 
-      // Smart reminders
-      const remEl = document.getElementById("reminders");
-      const urgent = pend.filter(a=>isOverdue(a.due) || daysDiff(a.due)<=2);
-      remEl.innerHTML = urgent.length
-        ? urgent.map(a=>`<div class="notice"><span>🔔</span><div><div class="title">${a.title}</div><div class="summary">Due ${fmtDate(a.due)} • Suggested: 45 mins today</div></div></div>`).join("")
-        : `<div class="notice"><span>✅</span><div><div class="title">All clear</div><div class="summary">No urgent items within 48 hours.</div></div></div>`;
-    }
-
-    // ----- Assignment completion toggle -----
-    document.addEventListener("click",(e)=>{
-      if(e.target.classList.contains("chk")){
-        const id = e.target.dataset.id;
-        if(state.completed.includes(id)){
-          state.completed = state.completed.filter(x=>x!==id);
-          e.target.classList.remove("done"); e.target.textContent="";
-        }else{
-          state.completed.push(id);
-          e.target.classList.add("done"); e.target.textContent="✓";
+            // Smart reminders
+            const remEl = document.getElementById("reminders");
+            const urgent = pend.filter(a => isOverdue(a.due) || daysDiff(a.due) <= 2);
+            remEl.innerHTML = urgent.length
+                ? urgent.map(a => `<div class="notice"><span>🔔</span><div><div class="title">${a.title}</div><div class="summary">Due ${fmtDate(a.due)} • Suggested: 45 mins today</div></div></div>`).join("")
+                : `<div class="notice"><span>✅</span><div><div class="title">All clear</div><div class="summary">No urgent items within 48 hours.</div></div></div>`;
         }
-        saveProgress();
-        renderAll();
-      }
-    });
 
-    // ----- Subjects rendering -----
-    function renderSubjects(){
-      const sc = document.getElementById("subjectsContainer");
-      sc.innerHTML="";
-      // Populate filter dropdown once
-      const sf = document.getElementById("subjectFilter");
-      if(sf.options.length===1){
-        subjects.forEach(s=>{
-          const opt = document.createElement("option"); opt.value=s.code; opt.textContent=`${s.code} — ${s.name}`;
-          sf.appendChild(opt);
+        // ----- Assignment completion toggle -----
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("chk")) {
+                const id = e.target.dataset.id;
+                if (state.completed.includes(id)) {
+                    state.completed = state.completed.filter(x => x !== id);
+                    e.target.classList.remove("done"); e.target.textContent = "";
+                } else {
+                    state.completed.push(id);
+                    e.target.classList.add("done"); e.target.textContent = "✓";
+                }
+                saveProgress();
+                renderAll();
+            }
         });
-      }
-      const statusF = state.statusFilter;
-      const filteredAssignments = assignments.filter(a=>{
-        const matchSubject = state.subjectFilter==="all" ? true : a.subject===state.subjectFilter;
-        const matchDate = state.dateFilter==="all" ? true
-          : state.dateFilter==="today" ? (new Date(a.due).toDateString()===today.toDateString())
-          : state.dateFilter==="week" ? inNext7Days(a.due)
-          : state.dateFilter==="overdue" ? isOverdue(a.due) : true;
-        const matchStatus = statusF==="all" ? true
-          : statusF==="pending" ? !state.completed.includes(a.id)
-          : statusF==="completed" ? state.completed.includes(a.id) : true;
-        const matchQuery = state.query? (a.title.toLowerCase().includes(state.query)||a.subject.toLowerCase().includes(state.query)) : true;
-        return matchSubject && matchDate && matchStatus && matchQuery;
-      });
 
-      subjects.forEach(s=>{
-        const container = document.createElement("div");
-        container.className="card";
-        const sItems = filteredAssignments.filter(a=>a.subject===s.code);
-        const subjHomework = (homeworkNotes[s.code]||[]);
-        const completedCount = sItems.filter(a=>state.completed.includes(a.id)).length;
-        const pct = sItems.length? Math.round(completedCount/sItems.length*100) : 0;
+        // ----- Subjects rendering -----
+        function renderSubjects() {
+            const sc = document.getElementById("subjectsContainer");
+            sc.innerHTML = "";
+            // Populate filter dropdown once
+            const sf = document.getElementById("subjectFilter");
+            if (sf.options.length === 1) {
+                subjects.forEach(s => {
+                    const opt = document.createElement("option"); opt.value = s.code; opt.textContent = `${s.code} — ${s.name}`;
+                    sf.appendChild(opt);
+                });
+            }
+            const statusF = state.statusFilter;
+            const filteredAssignments = assignments.filter(a => {
+                const matchSubject = state.subjectFilter === "all" ? true : a.subject === state.subjectFilter;
+                const matchDate = state.dateFilter === "all" ? true
+                    : state.dateFilter === "today" ? (new Date(a.due).toDateString() === today.toDateString())
+                        : state.dateFilter === "week" ? inNext7Days(a.due)
+                            : state.dateFilter === "overdue" ? isOverdue(a.due) : true;
+                const matchStatus = statusF === "all" ? true
+                    : statusF === "pending" ? !state.completed.includes(a.id)
+                        : statusF === "completed" ? state.completed.includes(a.id) : true;
+                const matchQuery = state.query ? (a.title.toLowerCase().includes(state.query) || a.subject.toLowerCase().includes(state.query)) : true;
+                return matchSubject && matchDate && matchStatus && matchQuery;
+            });
 
-        container.innerHTML = `
+            subjects.forEach(s => {
+                const container = document.createElement("div");
+                container.className = "card";
+                const sItems = filteredAssignments.filter(a => a.subject === s.code);
+                const subjHomework = (homeworkNotes[s.code] || []);
+                const completedCount = sItems.filter(a => state.completed.includes(a.id)).length;
+                const pct = sItems.length ? Math.round(completedCount / sItems.length * 100) : 0;
+
+                container.innerHTML = `
           <h3>${s.code} — ${s.name}</h3>
           <div class="sub">Assignments & materials</div>
           <div class="progress"><div class="bar" style="width:${pct}%"></div></div>
           <div class="list">
-            ${sItems.length? sItems.map(a=>`
+            ${sItems.length ? sItems.map(a => `
               <div class="item">
-                <div class="chk ${state.completed.includes(a.id)?'done':''}" data-id="${a.id}" title="Mark complete">${state.completed.includes(a.id)?'✓':''}</div>
+                <div class="chk ${state.completed.includes(a.id) ? 'done' : ''}" data-id="${a.id}" title="Mark complete">${state.completed.includes(a.id) ? '✓' : ''}</div>
                 <div>
                   <div class="title">${a.title}</div>
                   <div class="meta">${a.type} • Due ${fmtDate(a.due)}</div>
                   <div class="meta">AI tags: ${aiAutoTag(a).join(", ")}</div>
                 </div>
                 <div class="actions">
-                  <span class="badge ${isOverdue(a.due)?'danger':inNext7Days(a.due)?'warn':'ok'}">${isOverdue(a.due)?'Overdue':inNext7Days(a.due)?'Due soon':'On track'}</span>
+                  <span class="badge ${isOverdue(a.due) ? 'danger' : inNext7Days(a.due) ? 'warn' : 'ok'}">${isOverdue(a.due) ? 'Overdue' : inNext7Days(a.due) ? 'Due soon' : 'On track'}</span>
                 </div>
               </div>
             `).join("") : `<div class="notice"><span>📂</span><div><div class="title">No assignments</div><div class="summary">Try another filter or subject.</div></div></div>`}
           </div>
           <div style="margin-top:10px" class="list">
-            ${subjHomework.map(h=>`
+            ${subjHomework.map(h => `
               <div class="item">
                 <span>📘</span>
                 <div>
@@ -805,52 +1260,52 @@
             `).join("")}
           </div>
         `;
-        sc.appendChild(container);
-      });
-    }
-    document.getElementById("subjectFilter").addEventListener("change",(e)=>{
-      state.subjectFilter = e.target.value; renderSubjects();
-    });
-    document.getElementById("dateFilter").addEventListener("change",(e)=>{
-      state.dateFilter = e.target.value; renderSubjects();
-    });
-    document.getElementById("statusFilter").addEventListener("change",(e)=>{
-      state.statusFilter = e.target.value; renderSubjects();
-    });
-    document.getElementById("searchInput").addEventListener("input",(e)=>{
-      state.query = e.target.value.trim().toLowerCase(); renderSubjects();
-    });
+                sc.appendChild(container);
+            });
+        }
+        document.getElementById("subjectFilter").addEventListener("change", (e) => {
+            state.subjectFilter = e.target.value; renderSubjects();
+        });
+        document.getElementById("dateFilter").addEventListener("change", (e) => {
+            state.dateFilter = e.target.value; renderSubjects();
+        });
+        document.getElementById("statusFilter").addEventListener("change", (e) => {
+            state.statusFilter = e.target.value; renderSubjects();
+        });
+        document.getElementById("searchInput").addEventListener("input", (e) => {
+            state.query = e.target.value.trim().toLowerCase(); renderSubjects();
+        });
 
-    // ----- Notice board -----
-    function renderNotices(){
-      const pin2 = notices.find(n=>n.id==="n2");
-      document.getElementById("pinnedSummary2").textContent = aiSummarize(pin2.body);
-      const nl = document.getElementById("noticesList");
-      nl.innerHTML="";
-      notices.sort((a,b)=>new Date(b.date)-new Date(a.date)).forEach(n=>{
-        const div = document.createElement("div");
-        div.className="notice";
-        div.innerHTML = `
-          <span>${n.pinned?'📌':'📣'}</span>
+        // ----- Notice board -----
+        function renderNotices() {
+            const pin2 = notices.find(n => n.id === "n2");
+            document.getElementById("pinnedSummary2").textContent = aiSummarize(pin2.body);
+            const nl = document.getElementById("noticesList");
+            nl.innerHTML = "";
+            notices.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(n => {
+                const div = document.createElement("div");
+                div.className = "notice";
+                div.innerHTML = `
+          <span>${n.pinned ? '📌' : '📣'}</span>
           <div>
             <div class="title">${n.title}</div>
             <div class="summary">${aiSummarize(n.body)}</div>
             <div class="meta">Posted ${fmtDate(n.date)}</div>
           </div>
         `;
-        nl.appendChild(div);
-      });
-    }
+                nl.appendChild(div);
+            });
+        }
 
-    // ----- Faculty directory -----
-    function renderFaculty(){
-      const grid = document.getElementById("facultyGrid");
-      grid.innerHTML="";
-      faculty.forEach(f=>{
-        const div = document.createElement("div");
-        div.className="fac-card";
-        const initials = (f.name.match(/\b[A-Za-z]/g)||["?"]).slice(0,2).join("");
-        div.innerHTML = `
+        // ----- Faculty directory -----
+        function renderFaculty() {
+            const grid = document.getElementById("facultyGrid");
+            grid.innerHTML = "";
+            faculty.forEach(f => {
+                const div = document.createElement("div");
+                div.className = "fac-card";
+                const initials = (f.name.match(/\b[A-Za-z]/g) || ["?"]).slice(0, 2).join("");
+                div.innerHTML = `
           <div class="avatar">${initials}</div>
           <div>
             <div class="title" style="font-weight:700">${f.name}</div>
@@ -859,163 +1314,164 @@
           </div>
           <div style="display:flex;gap:6px">
             <a class="btn-primary" style="text-decoration:none;padding:8px;border-radius:8px" href="mailto:${f.email}">Email</a>
-            <a class="btn-ghost" style="text-decoration:none;padding:8px;border-radius:8px" href="tel:${f.phone.replace(/\\s/g,'')}">Call</a>
+            <a class="btn-ghost" style="text-decoration:none;padding:8px;border-radius:8px" href="tel:${f.phone.replace(/\\s/g, '')}">Call</a>
           </div>
         `;
-        grid.appendChild(div);
-      });
-    }
+                grid.appendChild(div);
+            });
+        }
 
-    // ----- Calendar -----
-    let calCursor = new Date(today);
-    calCursor.setDate(1);
-    function renderCalendar(){
-      const monthName = calCursor.toLocaleDateString(undefined,{month:"long"});
-      const yearNum = calCursor.getFullYear();
-      document.getElementById("calMonth").textContent = monthName;
-      document.getElementById("calYear").textContent = yearNum;
-      const grid = document.getElementById("calendarGrid");
-      grid.innerHTML="";
-      const firstDay = new Date(calCursor);
-      firstDay.setDate(1);
-      const startIdx = firstDay.getDay(); // 0 Sun..6 Sat
-      const daysInMonth = new Date(yearNum, calCursor.getMonth()+1, 0).getDate();
+        // ----- Calendar -----
+        let calCursor = new Date(today);
+        calCursor.setDate(1);
+        function renderCalendar() {
+            const monthName = calCursor.toLocaleDateString(undefined, { month: "long" });
+            const yearNum = calCursor.getFullYear();
+            document.getElementById("calMonth").textContent = monthName;
+            document.getElementById("calYear").textContent = yearNum;
+            const grid = document.getElementById("calendarGrid");
+            grid.innerHTML = "";
+            const firstDay = new Date(calCursor);
+            firstDay.setDate(1);
+            const startIdx = firstDay.getDay(); // 0 Sun..6 Sat
+            const daysInMonth = new Date(yearNum, calCursor.getMonth() + 1, 0).getDate();
 
-      for(let i=0;i<startIdx;i++){
-        const d = document.createElement("div"); d.className="cal-day empty"; grid.appendChild(d);
-      }
-      for(let day=1; day<=daysInMonth; day++){
-        const d = new Date(yearNum, calCursor.getMonth(), day);
-        const iso = d.toISOString().slice(0,10);
-        const ev = calendarEvents.filter(e=>e.date===iso);
-        const cell = document.createElement("div");
-        cell.className="cal-day";
-        cell.innerHTML = `<div class="num">${day}</div>${ev.map(e=>`<div class="tag badge ${e.kind==='holiday'?'ok':e.kind==='exam'?'warn':'danger'}">${icon(e.kind)} ${e.label}</div>`).join("")}`;
-        grid.appendChild(cell);
-      }
-    }
-    document.getElementById("prevMonth").addEventListener("click",()=>{
-      calCursor.setMonth(calCursor.getMonth()-1); renderCalendar();
-    });
-    document.getElementById("nextMonth").addEventListener("click",()=>{
-      calCursor.setMonth(calCursor.getMonth()+1); renderCalendar();
-    });
+            for (let i = 0; i < startIdx; i++) {
+                const d = document.createElement("div"); d.className = "cal-day empty"; grid.appendChild(d);
+            }
+            for (let day = 1; day <= daysInMonth; day++) {
+                const d = new Date(yearNum, calCursor.getMonth(), day);
+                const iso = d.toISOString().slice(0, 10);
+                const ev = calendarEvents.filter(e => e.date === iso);
+                const cell = document.createElement("div");
+                cell.className = "cal-day";
+                cell.innerHTML = `<div class="num">${day}</div>${ev.map(e => `<div class="tag badge ${e.kind === 'holiday' ? 'ok' : e.kind === 'exam' ? 'warn' : 'danger'}">${icon(e.kind)} ${e.label}</div>`).join("")}`;
+                grid.appendChild(cell);
+            }
+        }
+        document.getElementById("prevMonth").addEventListener("click", () => {
+            calCursor.setMonth(calCursor.getMonth() - 1); renderCalendar();
+        });
+        document.getElementById("nextMonth").addEventListener("click", () => {
+            calCursor.setMonth(calCursor.getMonth() + 1); renderCalendar();
+        });
 
-    // ----- Chatbot -----
-    function chatSay(who,text){
-      const log = document.getElementById("chatLog");
-      const msg = document.createElement("div"); msg.className="msg";
-      msg.innerHTML = `<div class="who">${who}</div><div class="text">${text}</div>`;
-      log.appendChild(msg);
-      log.scrollTop = log.scrollHeight;
-    }
-    function nextDeadline(){
-      const pend = assignments.filter(a=>!state.completed.includes(a.id));
-      const soon = pend.sort((a,b)=>new Date(a.due)-new Date(b.due))[0];
-      return soon ? `${soon.title} (${soon.subject}) due ${fmtDate(soon.due)}` : "No pending deadlines.";
-    }
-    function pendingList(){
-      const pend = assignments.filter(a=>!state.completed.includes(a.id)).map(a=>`${a.title} — ${fmtDate(a.due)}`).join("<br>");
-      return pend || "Nothing pending. Great job!";
-    }
-    function chatbotAnswer(q){
-      const qq = q.toLowerCase();
-      if(qq.includes("pending") && (qq.includes("homework")||qq.includes("assignment"))) return pendingList();
-      if(qq.includes("next deadline") || qq.includes("upcoming")) return nextDeadline();
-      if(qq.includes("overdue")) {
-        const od = assignments.filter(a=>!state.completed.includes(a.id) && isOverdue(a.due)).map(a=>`${a.title} — ${fmtDate(a.due)}`).join("<br>");
-        return od || "No overdue items.";
-      }
-      if(qq.includes("progress")){
-        const comp = assignments.filter(a=>state.completed.includes(a.id)).length;
-        const pct = Math.round((comp/assignments.length)*100);
-        return `You’re ${pct}% through your assignments.`;
-      }
-      if(qq.includes("filter")) return "Use the Subjects tab: choose a subject and date/status filter, or search by keywords.";
-      if(qq.includes("notice")) return "Pinned: " + (notices.find(n=>n.pinned)?.title || "No pinned notices");
-      return "Try: “What homework is pending?”, “What is the next deadline?”, “Show overdue items”, or “My progress percentage”.";
-    }
-    document.getElementById("sendChat").addEventListener("click",()=>{
-      const q = document.getElementById("chatInput").value.trim();
-      if(!q) return;
-      chatSay("You", q);
-      setTimeout(()=> chatSay("AI", chatbotAnswer(q)), 350);
-      document.getElementById("chatInput").value="";
-    });
+        // ----- Chatbot -----
+        function chatSay(who, text) {
+            const log = document.getElementById("chatLog");
+            const msg = document.createElement("div"); msg.className = "msg";
+            msg.innerHTML = `<div class="who">${who}</div><div class="text">${text}</div>`;
+            log.appendChild(msg);
+            log.scrollTop = log.scrollHeight;
+        }
+        function nextDeadline() {
+            const pend = assignments.filter(a => !state.completed.includes(a.id));
+            const soon = pend.sort((a, b) => new Date(a.due) - new Date(b.due))[0];
+            return soon ? `${soon.title} (${soon.subject}) due ${fmtDate(soon.due)}` : "No pending deadlines.";
+        }
+        function pendingList() {
+            const pend = assignments.filter(a => !state.completed.includes(a.id)).map(a => `${a.title} — ${fmtDate(a.due)}`).join("<br>");
+            return pend || "Nothing pending. Great job!";
+        }
+        function chatbotAnswer(q) {
+            const qq = q.toLowerCase();
+            if (qq.includes("pending") && (qq.includes("homework") || qq.includes("assignment"))) return pendingList();
+            if (qq.includes("next deadline") || qq.includes("upcoming")) return nextDeadline();
+            if (qq.includes("overdue")) {
+                const od = assignments.filter(a => !state.completed.includes(a.id) && isOverdue(a.due)).map(a => `${a.title} — ${fmtDate(a.due)}`).join("<br>");
+                return od || "No overdue items.";
+            }
+            if (qq.includes("progress")) {
+                const comp = assignments.filter(a => state.completed.includes(a.id)).length;
+                const pct = Math.round((comp / assignments.length) * 100);
+                return `You’re ${pct}% through your assignments.`;
+            }
+            if (qq.includes("filter")) return "Use the Subjects tab: choose a subject and date/status filter, or search by keywords.";
+            if (qq.includes("notice")) return "Pinned: " + (notices.find(n => n.pinned)?.title || "No pinned notices");
+            return "Try: “What homework is pending?”, “What is the next deadline?”, “Show overdue items”, or “My progress percentage”.";
+        }
+        document.getElementById("sendChat").addEventListener("click", () => {
+            const q = document.getElementById("chatInput").value.trim();
+            if (!q) return;
+            chatSay("You", q);
+            setTimeout(() => chatSay("AI", chatbotAnswer(q)), 350);
+            document.getElementById("chatInput").value = "";
+        });
 
-    // ----- Profile -----
-    function fillProfile(){
-      const initials = (state.name.match(/\b[A-Za-z]/g)||["U"]).slice(0,2).join("");
-      document.getElementById("pfAvatar").textContent = initials.toUpperCase();
-      document.getElementById("pfName").textContent = capitalize(state.name);
-      document.getElementById("pfEmail").textContent = state.email;
-      document.getElementById("pfCourse").textContent = `${group.course || '—'} • Section ${group.section || '—'}`;
-      document.getElementById("pfStreak").textContent = state.streak;
-      const comp = assignments.filter(a=>state.completed.includes(a.id)).length;
-      const pct = Math.round((comp/assignments.length)*100);
-      document.getElementById("pfProgressBar").style.width = pct+"%";
-      document.getElementById("pfProgressText").textContent = `${pct}% completed`;
-      const overdueRate = assignments.filter(a=>isOverdue(a.due) && !state.completed.includes(a.id)).length;
-      const onTimeText = overdueRate ? "On-time rate: 80%" : "On-time rate: 100%";
-      document.getElementById("pfOnTime").textContent = onTimeText;
-      document.getElementById("pfGroups").textContent = `${group.course || '—'} • Section ${group.section || '—'}`;
-    }
-    document.getElementById("pfSwitch").addEventListener("click",()=>{
-      alert("Prototype: To switch, logout and login with a different course + section.");
-    });
-    document.getElementById("editProfileBtn").addEventListener("click",()=>{
-      const newName = prompt("Enter display name:", state.name);
-      if(newName && newName.trim()){
-        state.name = newName.trim();
-        localStorage.setItem("cf_name", state.name);
-        fillProfile();
-      }
-    });
+        // ----- Profile -----
+        function fillProfile() {
+            const initials = (state.name.match(/\b[A-Za-z]/g) || ["U"]).slice(0, 2).join("");
+            document.getElementById("pfAvatar").textContent = initials.toUpperCase();
+            document.getElementById("pfName").textContent = capitalize(state.name);
+            document.getElementById("pfEmail").textContent = state.email;
+            document.getElementById("pfCourse").textContent = `${group.course || '—'} • Section ${group.section || '—'}`;
+            document.getElementById("pfStreak").textContent = state.streak;
+            const comp = assignments.filter(a => state.completed.includes(a.id)).length;
+            const pct = Math.round((comp / assignments.length) * 100);
+            document.getElementById("pfProgressBar").style.width = pct + "%";
+            document.getElementById("pfProgressText").textContent = `${pct}% completed`;
+            const overdueRate = assignments.filter(a => isOverdue(a.due) && !state.completed.includes(a.id)).length;
+            const onTimeText = overdueRate ? "On-time rate: 80%" : "On-time rate: 100%";
+            document.getElementById("pfOnTime").textContent = onTimeText;
+            document.getElementById("pfGroups").textContent = `${group.course || '—'} • Section ${group.section || '—'}`;
+        }
+        document.getElementById("pfSwitch").addEventListener("click", () => {
+            alert("Prototype: To switch, logout and login with a different course + section.");
+        });
+        document.getElementById("editProfileBtn").addEventListener("click", () => {
+            const newName = prompt("Enter display name:", state.name);
+            if (newName && newName.trim()) {
+                state.name = newName.trim();
+                localStorage.setItem("cf_name", state.name);
+                fillProfile();
+            }
+        });
 
-    // ----- Settings -----
-    document.getElementById("settingsThemeSwitch").addEventListener("click",()=>{
-      toggleTheme();
-    });
-    document.getElementById("testReminder").addEventListener("click",()=>{
-      notifyDot(true);
-      alert("Smart reminder triggered: 1 item due within 48 hours.");
-    });
-    document.getElementById("resetProgress").addEventListener("click",()=>{
-      if(confirm("Clear assignment completion progress?")){
-        state.completed = [];
-        saveProgress();
-        renderAll();
-        fillProfile();
-      }
-    });
+        // ----- Settings -----
+        document.getElementById("settingsThemeSwitch").addEventListener("click", () => {
+            toggleTheme();
+        });
+        document.getElementById("testReminder").addEventListener("click", () => {
+            notifyDot(true);
+            alert("Smart reminder triggered: 1 item due within 48 hours.");
+        });
+        document.getElementById("resetProgress").addEventListener("click", () => {
+            if (confirm("Clear assignment completion progress?")) {
+                state.completed = [];
+                saveProgress();
+                renderAll();
+                fillProfile();
+            }
+        });
 
-    // ----- Global completion toggle click -----
-    document.addEventListener("click",(e)=>{
-      if(e.target.classList.contains("tab")){
-        // handled in switchTab
-      }
-    });
+        // ----- Global completion toggle click -----
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("tab")) {
+                // handled in switchTab
+            }
+        });
 
-    // ----- Render orchestrator -----
-    function renderAll(){
-      renderDashboard();
-      renderSubjects();
-      renderNotices();
-      renderFaculty();
-      renderCalendar();
-      fillProfile();
-    }
+        // ----- Render orchestrator -----
+        function renderAll() {
+            renderDashboard();
+            renderSubjects();
+            renderNotices();
+            renderFaculty();
+            renderCalendar();
+            fillProfile();
+        }
 
-    // ----- Filters update events -----
-    document.getElementById("statusFilter").addEventListener("change",(e)=>{
-      state.statusFilter = e.target.value; renderSubjects();
-    });
+        // ----- Filters update events -----
+        document.getElementById("statusFilter").addEventListener("change", (e) => {
+            state.statusFilter = e.target.value; renderSubjects();
+        });
 
-    // ----- Init if rehydrated session -----
-    (function bootstrap(){
-      applyTheme();
-      // Start on login screen; the app shows after login or skip
-    })();
-  </script>
+        // ----- Init if rehydrated session -----
+        (function bootstrap() {
+            applyTheme();
+            // Start on login screen; the app shows after login or skip
+        })();
+    </script>
 </body>
+
 </html>
