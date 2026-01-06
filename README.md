@@ -1,4 +1,4 @@
-# 🎓 EduSync - AI-Powered Academic Platform
+# 🎓 Brain Byte - Academic platform
 
 *A smart platform to replace WhatsApp college groups with organized academic management*
 
