@@ -1,6 +1,5 @@
 # 🎓 EduSync - AI-Powered Academic Platform
 
-![EduSync Banner](https://via.placeholder.com/1200x400/4361ee/ffffff?text=EduSync+AI-Powered+Academic+Platform)
 *A smart platform to replace WhatsApp college groups with organized academic management*
 
 ## 🎯 Overview
